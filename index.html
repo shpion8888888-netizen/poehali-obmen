@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поехали — Обмен валют</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #FFFFFF;
+            color: #171A20;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Color Palette */
+        :root {
+            --electric-blue: #3E6AE1;
+            --white: #FFFFFF;
+            --carbon-dark: #171A20;
+            --graphite: #393C41;
+            --pewter: #5C5E62;
+            --silver-fog: #8E8E8E;
+            --light-ash: #F4F4F4;
+            --cloud-gray: #EEEEEE;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            padding: 16px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--cloud-gray);
+            transition: all 0.33s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-bar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            border-bottom: 1px solid var(--cloud-gray);
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--carbon-dark);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 48px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--carbon-dark);
+            text-decoration: none;
+            transition: color 0.33s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--electric-blue);
+        }
+
+        .nav-phone {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--electric-blue);
+            text-decoration: none;
+            transition: opacity 0.33s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-phone:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 48px 0;
+            position: relative;
+            overflow: hidden;
+            margin-top: 60px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(62, 106, 225, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(62, 106, 225, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 500;
+            color: var(--carbon-dark);
+            margin-bottom: 16px;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--graphite);
+            margin-bottom: 48px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 64px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0 32px;
+            height: 40px;
+            border-radius: 4px;
+            border: 3px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.33s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 200px;
+        }
+
+        .btn-primary {
+            background-color: var(--electric-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: #2d52b8;
+            box-shadow: inset 0 0 0 3px #2d52b8;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--carbon-dark);
+            border: 3px solid var(--cloud-gray);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--carbon-dark);
+            background-color: var(--light-ash);
+        }
+
+        /* Converter Section */
+        .converter {
+            background-color: var(--white);
+            padding: 80px 48px;
+            margin-top: 100px;
+        }
+
+        .converter-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 500;
+            color: var(--carbon-dark);
+            text-align: center;
+            margin-bottom: 48px;
+            letter-spacing: -0.5px;
+        }
+
+        .converter-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--pewter);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            padding: 12px 16px;
+            border: 1px solid var(--cloud-gray);
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--carbon-dark);
+            background-color: var(--white);
+            transition: border-color 0.33s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--electric-blue);
+        }
+
+        .form-input::placeholder {
+            color: var(--silver-fog);
+        }
+
+        .converter-result {
+            background-color: var(--light-ash);
+            padding: 24px;
+            border-radius: 4px;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .result-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--pewter);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .result-value {
+            font-size: 36px;
+            font-weight: 500;
+            color: var(--electric-blue);
+            margin-bottom: 8px;
+        }
+
+        .result-note {
+            font-size: 12px;
+            color: var(--silver-fog);
+        }
+
+        .converter-btn {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        /* Rates Section */
+        .rates {
+            background-color: var(--light-ash);
+            padding: 80px 48px;
+        }
+
+        .rates-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .rates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .rate-card {
+            background-color: var(--white);
+            padding: 32px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .rate-pair {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--pewter);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rate-value {
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--carbon-dark);
+            margin-bottom: 8px;
+        }
+
+        .rate-change {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        .rate-change.down {
+            color: #ef4444;
+        }
+
+        /* Info Section */
+        .info {
+            padding: 80px 48px;
+            background-color: var(--white);
+        }
+
+        .info-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 48px;
+            margin-top: 48px;
+        }
+
+        .info-card h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--carbon-dark);
+            margin-bottom: 12px;
+        }
+
+        .info-card p {
+            font-size: 14px;
+            color: var(--graphite);
+            line-height: 1.6;
+        }
+
+        .info-card a {
+            color: var(--electric-blue);
+            text-decoration: none;
+            transition: opacity 0.33s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .info-card a:hover {
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--carbon-dark);
+            color: var(--white);
+            padding: 48px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        footer p {
+            margin-bottom: 12px;
+        }
+
+        .footer-links {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            margin: 0 16px;
+            transition: color 0.33s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .nav-bar {
+                padding: 16px 32px;
+            }
+
+            .nav-links {
+                gap: 32px;
+            }
+
+            .hero {
+                padding: 80px 32px 0;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-bar {
+                padding: 12px 24px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .logo {
+                font-size: 16px;
+            }
+
+            .hero {
+                margin-top: 50px;
+                padding: 60px 24px 0;
+                min-height: auto;
+                height: auto;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+                margin-bottom: 12px;
+            }
+
+            .hero p {
+                font-size: 14px;
+                margin-bottom: 32px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .btn {
+                min-width: 100%;
+            }
+
+            .converter {
+                padding: 60px 24px;
+            }
+
+            .converter-form {
+                grid-template-columns: 1fr;
+            }
+
+            .rates {
+                padding: 60px 24px;
+            }
+
+            .info {
+                padding: 60px 24px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .section-title {
+                font-size: 24px;
+                margin-bottom: 32px;
+            }
+
+            footer {
+                padding: 32px 24px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .hero p {
+                font-size: 13px;
+            }
+
+            .nav-phone {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="logo">Поехали</div>
+        <ul class="nav-links">
+            <li><a href="#converter">Конвертер</a></li>
+            <li><a href="#rates">Курсы</a></li>
+            <li><a href="#info">О сервисе</a></li>
+        </ul>
+        <a href="tel:+79528488661" class="nav-phone">+7 952 848 86 61</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Обмен валют в Череповце</h1>
+            <p>Надежный и прозрачный сервис обмена валют. Справедливые курсы, быстрые транзакции, персональный сервис.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="document.getElementById('converter').scrollIntoView()">Обменять валюту</button>
+                <a href="tel:+79528488661" class="btn btn-secondary">Позвонить</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Converter Section -->
+    <section class="converter" id="converter">
+        <div class="converter-container">
+            <h2 class="section-title">Калькулятор обмена</h2>
+            <div class="converter-form">
+                <div class="form-group">
+                    <label class="form-label">Отдаете</label>
+                    <input type="number" id="fromAmount" class="form-input" placeholder="100" value="100" oninput="updateConverter()">
+                    <select id="fromCurrency" class="form-input" style="margin-top: 8px;" onchange="updateConverter()">
+                        <option value="RUB">RUB — Рубль</option>
+                        <option value="USD">USD — Доллар</option>
+                        <option value="EUR">EUR — Евро</option>
+                        <option value="GBP">GBP — Фунт</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Получаете</label>
+                    <input type="number" id="toAmount" class="form-input" placeholder="0" readonly>
+                    <select id="toCurrency" class="form-input" style="margin-top: 8px;" onchange="updateConverter()">
+                        <option value="USD">USD — Доллар</option>
+                        <option value="EUR">EUR — Евро</option>
+                        <option value="GBP">GBP — Фунт</option>
+                        <option value="RUB">RUB — Рубль</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="converter-result">
+                <div class="result-label">Курс обмена</div>
+                <div class="result-value" id="rateValue">—</div>
+                <div class="result-note">Курсы обновляются в режиме реального времени</div>
+            </div>
+
+            <button class="btn btn-primary converter-btn">Заказать обмен</button>
+            <p style="text-align: center; font-size: 12px; color: var(--silver-fog); line-height: 1.8;">
+                Минимальная сумма: 100 ₽<br>
+                Без скрытых комиссий
+            </p>
+        </div>
+    </section>
+
+    <!-- Rates Section -->
+    <section class="rates" id="rates">
+        <div class="rates-container">
+            <h2 class="section-title">Актуальные курсы</h2>
+            <div class="rates-grid">
+                <div class="rate-card">
+                    <div class="rate-pair">USD/RUB</div>
+                    <div class="rate-value" id="rate-usd-rub">98.50</div>
+                    <div class="rate-change">↑ +0.32%</div>
+                </div>
+                <div class="rate-card">
+                    <div class="rate-pair">EUR/RUB</div>
+                    <div class="rate-value" id="rate-eur-rub">107.25</div>
+                    <div class="rate-change">↓ -0.15%</div>
+                </div>
+                <div class="rate-card">
+                    <div class="rate-pair">GBP/RUB</div>
+                    <div class="rate-value" id="rate-gbp-rub">124.80</div>
+                    <div class="rate-change">↑ +0.48%</div>
+                </div>
+                <div class="rate-card">
+                    <div class="rate-pair">EUR/USD</div>
+                    <div class="rate-value" id="rate-eur-usd">1.0895</div>
+                    <div class="rate-change">↑ +0.18%</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info" id="info">
+        <div class="info-container">
+            <h2 class="section-title">О сервисе</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Надежность</h3>
+                    <p>Работаем с лицензированными партнёрами. Все операции застрахованы. Безопасность ваших средств — наш приоритет.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Справедливые курсы</h3>
+                    <p>Минимальная маржа, прозрачное ценообразование. Видите курс до совершения операции — никаких сюрпризов.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Быстрые транзакции</h3>
+                    <p>Обмен завершается за 5–15 минут. Срочные операции обрабатываются в приоритетном порядке.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Адреса</h3>
+                    <p><strong>Череповец</strong><br>Вологодская область<br>Первомайская улица, д. 45<br>БЦ «The Point»</p>
+                    <p style="margin-top: 16px;"><strong>Новокузнецк</strong><br>Кемеровская область — Кузбасс<br>Улица Циолковского, д. 65Б</p>
+                </div>
+                <div class="info-card">
+                    <h3>Телефон</h3>
+                    <p><a href="tel:+79528488661">+7 952 848 86 61</a><br>Пн–Пт: 09:00–18:00<br>Сб–Вс: выходной</p>
+                </div>
+                <div class="info-card">
+                    <h3>Консультация</h3>
+                    <p>Не уверены какой способ выбрать? Консультанты помогут найти оптимальное решение для вас.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Поехали</strong> — обмен валют в Череповце</p>
+        <p>© 2024 ООО Поехали. Все права защищены.</p>
+        <div class="footer-links">
+            <a href="#" onclick="return false;">Политика конфиденциальности</a>
+            <a href="#" onclick="return false;">Пользовательское соглашение</a>
+            <a href="#" onclick="return false;">Контакты</a>
+        </div>
+    </footer>
+
+    <script>
+        // Exchange rates (demo rates)
+        const rates = {
+            'USD': 98.50,
+            'EUR': 107.25,
+            'GBP': 124.80
+        };
+
+        function updateConverter() {
+            const fromAmount = parseFloat(document.getElementById('fromAmount').value) || 0;
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+
+            let rate = 1;
+
+            if (fromCurrency === 'RUB') {
+                rate = 1 / rates[toCurrency];
+            } else if (toCurrency === 'RUB') {
+                rate = rates[fromCurrency];
+            } else {
+                rate = rates[fromCurrency] / rates[toCurrency];
+            }
+
+            const toAmount = (fromAmount * rate).toFixed(2);
+            document.getElementById('toAmount').value = toAmount;
+            document.getElementById('rateValue').textContent = rate.toFixed(4);
+        }
+
+        // Navigation scroll effect
+        window.addEventListener('scroll', function() {
+            const navBar = document.querySelector('.nav-bar');
+            if (window.scrollY > 10) {
+                navBar.classList.add('scrolled');
+            } else {
+                navBar.classList.remove('scrolled');
+            }
+        });
+
+        // Initialize
+        updateConverter();
+    </script>
+</body>
+</html>
